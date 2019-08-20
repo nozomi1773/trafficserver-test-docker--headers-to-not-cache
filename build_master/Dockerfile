@@ -19,6 +19,7 @@ RUN apt-get update \
 COPY nginx_config/default /etc/nginx/sites-available/default
 RUN htpasswd -b -c /etc/nginx/.htpasswd test test \
  && nginx \
+ && echo "test" > /var/www/html/index.html \
  && mkdir /var/www/html/test_a && echo "test" > /var/www/html/test_a/index.html \
  && mkdir /var/www/html/test_b && echo "test" > /var/www/html/test_b/index.html \
  && mkdir /var/www/html/test_c && echo "test" > /var/www/html/test_c/index.html \

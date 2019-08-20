@@ -45,7 +45,6 @@ ts.Disk.records_config.update({
    'proxy.config.diags.debug.tags': 'http|dns',
    'proxy.config.diags.output.debug': 'L',
    'proxy.config.hostdb.host_file.path' : '/etc/hosts',
-   'proxy.config.http.cache.cache_responses_to_cookies' : 0,
 })
 
 ###### Test Run ######
@@ -122,7 +121,7 @@ tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
 tr.StillRunningAfter = ts
 
 # Test 2 - 4 :  Write Cache
-#   Characteristic Client Request header : Cache-Control:no-cache
+#   Characteristic Client Request header : Cache-Control:no-cache ( default : CONFIG proxy.config.http.cache.ignore_client_no_cache 1 )
 #   Characteristic Origin Response header : Cache-Control:max-age=5
 #
 # Via Infomation : [uScMsSfWpSeN:t cCMp sS]
@@ -135,16 +134,16 @@ tr.Processes.Default.ReturnCode = 0
 tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
 tr.StillRunningAfter = ts
 
-# Test 2 - 5 : Not Write Cache
-#   Characteristic Client Request header : Cookie:foo=777 ( CONFIG proxy.config.http.cache.cache_responses_to_cookies 0 )
+# Test 2 - 5 :  Write Cache
+#   Characteristic Client Request header : Cookie:foo=777 ( default : CONFIG proxy.config.http.cache.cache_responses_to_cookies 1 )
 #   Characteristic Origin Response header : Cache-Control:max-age=5
 #
-# Via Infomation : [uScMsSf pSeN:t cCMp sS]
+# Via Infomation : [uScMsSfWpSeN:t cCMp sS]
 #   client-info is S(simple request, not conditional) , cache-lookup is M(miss) , server-info is S(served) ,
-#   cache-fill is blank(no cache write performed) , proxy-info is S(served) , error-codes is N(no error)
+#   cache-fill is W(written into cache, new copy) , proxy-info is S(served) , error-codes is N(no error)
 tr = Test.AddTestRun()
 tr.Processes.Default.StartBefore(Test.Processes.ts)
 tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 -H "Cookie: foo=777" http://localhost:{port}/test_e/index.html'.format(port=ts.Variables.port)
 tr.Processes.Default.ReturnCode = 0
-tr.Processes.Default.Streams.stdout = "gold/200_OK_not_cache_with_cache_control.gold"
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
 tr.StillRunningAfter = ts

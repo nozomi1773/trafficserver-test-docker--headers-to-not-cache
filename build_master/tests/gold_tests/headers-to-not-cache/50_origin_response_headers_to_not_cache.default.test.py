@@ -140,3 +140,27 @@ tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhos
 tr.Processes.Default.ReturnCode = 0
 tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_expired.gold"
 tr.StillRunningAfter = ts
+
+# Test 6 - 1 :
+#   Characteristic Client Request header : none
+#   Characteristic Origin Response header : Cache-Control:max-age=5 , Expires: 0
+#
+# Via Infomation : [uScMsSfWpSeN:t cCMp sS]
+#   client-info is S(simple request, not conditional) , cache-lookup is M(miss) , server-info is S(served) ,
+#   cache-fill is W(written into cache, new copy) , proxy-info is S(served) , error-codes is N(no error)
+tr = Test.AddTestRun()
+tr.Processes.Default.StartBefore(Test.Processes.ts)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_k/index.html'.format(port=ts.Variables.port)
+tr.Processes.Default.ReturnCode = 0
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
+tr.StillRunningAfter = ts
+# Test 6 - 2 :
+# Via Infomation : [uScHs f p eN:t cCHp s ]
+#   client-info is S(simple request, not conditional) , cache-lookup is H(in cache, fresh) , server-info is blank(no server connection needed) ,
+#   cache-fill is blank(=not recorded) , proxy-info is blank(=not recorded) , error-codes is N(no error)
+tr = Test.AddTestRun()
+tr.Processes.Default.StartBefore(Test.Processes.ts)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_k/index.html'.format(port=ts.Variables.port)
+tr.Processes.Default.ReturnCode = 0
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_hit.gold"
+tr.StillRunningAfter = ts

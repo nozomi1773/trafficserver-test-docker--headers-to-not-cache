@@ -7,7 +7,7 @@ Last-Modified: ``
 ETag: ``
 Cache-Control: max-age=5
 Accept-Ranges: bytes
-Age: 0
+Age: ``
 Connection: keep-alive
 Via: http/1.1 traffic_server (ApacheTrafficServer [uScMsSfWpSeN:t cCMp sS])
 ``

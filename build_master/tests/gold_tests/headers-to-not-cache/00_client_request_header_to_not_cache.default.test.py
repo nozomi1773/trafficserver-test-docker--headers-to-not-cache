@@ -28,6 +28,9 @@ Test.SkipUnless(
 )
 Test.ContinueOnFail = True
 
+# Define default ATS
+ts = Test.MakeATSProcess("ts")
+
 ###### ATS Configuration ######
 ts.Disk.plugin_config.AddLine('xdebug.so')
 ts.Disk.remap_config.AddLine(

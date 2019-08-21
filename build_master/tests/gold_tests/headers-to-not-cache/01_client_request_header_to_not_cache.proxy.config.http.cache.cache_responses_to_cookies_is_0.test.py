@@ -48,7 +48,7 @@ ts.Disk.records_config.update({
    'proxy.config.diags.debug.tags': 'http|dns',
    'proxy.config.diags.output.debug': 'L',
    'proxy.config.hostdb.host_file.path' : '/etc/hosts',
-   'proxy.config.http.cache.cache_responses_to_cookies' : 1,
+   'proxy.config.http.cache.cache_responses_to_cookies' : 0,
 })
 
 ###### Test Run ######
@@ -95,11 +95,31 @@ tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhos
 tr.Processes.Default.ReturnCode = 0
 tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
 tr.StillRunningAfter = ts
+# Test 2 - 1 -2 :  Cache HIT
+# Via Infomation : [uScHs f p eN:t cCHp s ]
+#   client-info is S(simple request, not conditional) , cache-lookup is H(in cache, fresh) , server-info is blank(no server connection needed) ,
+#   cache-fill is blank(=not recorded) , proxy-info is blank(=not recorded) , error-codes is N(no error)
+tr = Test.AddTestRun()
+tr.Processes.Default.StartBefore(Test.Processes.ts)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_a/index.html'.format(port=ts.Variables.port)
+tr.Processes.Default.ReturnCode = 0
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_hit.gold"
+tr.StillRunningAfter = ts
 
 # Test 2 - 2 :  Write Cache
 #   Characteristic Client Request header : Authorization:Basic dGVzdDp0ZXN0
 #   Characteristic Origin Response header : Cache-Control:max-age=5
 #
+# Via Infomation : [uScMsSfWpSeN:t cCMp sS]
+#   client-info is S(simple request, not conditional) , cache-lookup is M(miss) , server-info is S(served) ,
+#   cache-fill is W(written into cache, new copy) , proxy-info is S(served) , error-codes is N(no error)
+tr = Test.AddTestRun()
+tr.Processes.Default.StartBefore(Test.Processes.ts)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_b/index.html -u test:test'.format(port=ts.Variables.port)
+tr.Processes.Default.ReturnCode = 0
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
+tr.StillRunningAfter = ts
+# Test 2 - 2  - 2 :
 # Via Infomation : [uScMsSfWpSeN:t cCMp sS]
 #   client-info is S(simple request, not conditional) , cache-lookup is M(miss) , server-info is S(served) ,
 #   cache-fill is W(written into cache, new copy) , proxy-info is S(served) , error-codes is N(no error)
@@ -123,6 +143,16 @@ tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 -H "Cache-Contr
 tr.Processes.Default.ReturnCode = 0
 tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
 tr.StillRunningAfter = ts
+# Test 2 - 3 - 2 :
+# Via Infomation : [uScHs f p eN:t cCHp s ]
+#   client-info is S(simple request, not conditional) , cache-lookup is H(in cache, fresh) , server-info is blank(no server connection needed) ,
+#   cache-fill is blank(=not recorded) , proxy-info is blank(=not recorded) , error-codes is N(no error)
+tr = Test.AddTestRun()
+tr.Processes.Default.StartBefore(Test.Processes.ts)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 -H "Cache-Control:no-store" http://localhost:{port}/test_c/index.html'.format(port=ts.Variables.port)
+tr.Processes.Default.ReturnCode = 0
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_hit.gold"
+tr.StillRunningAfter = ts
 
 # Test 2 - 4 :  Write Cache
 #   Characteristic Client Request header : Cache-Control:no-cache ( default : CONFIG proxy.config.http.cache.ignore_client_no_cache 1 )
@@ -136,6 +166,16 @@ tr.Processes.Default.StartBefore(Test.Processes.ts)
 tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 -H "Cache-Control:no-cache" http://localhost:{port}/test_d/index.html'.format(port=ts.Variables.port)
 tr.Processes.Default.ReturnCode = 0
 tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
+tr.StillRunningAfter = ts
+# Test 2 - 4 - 2 :  Cache Hit ( not revalidate )
+# Via Infomation : [uScHs f p eN:t cCHp s ]
+#   client-info is S(simple request, not conditional) , cache-lookup is H(in cache, fresh) , server-info is blank(no server connection needed) ,
+#   cache-fill is blank(=not recorded) , proxy-info is blank(=not recorded) , error-codes is N(no error)
+tr = Test.AddTestRun()
+tr.Processes.Default.StartBefore(Test.Processes.ts)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 -H "Cache-Control:no-cache" http://localhost:{port}/test_d/index.html'.format(port=ts.Variables.port)
+tr.Processes.Default.ReturnCode = 0
+tr.Processes.Default.Streams.stdout = "gold/200_OK_hit.gold"
 tr.StillRunningAfter = ts
 
 # Test 2 - 5 :  Not Write Cache

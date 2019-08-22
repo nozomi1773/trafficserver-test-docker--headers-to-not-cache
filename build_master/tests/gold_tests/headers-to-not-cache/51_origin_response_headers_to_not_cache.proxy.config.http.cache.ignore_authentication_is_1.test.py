@@ -84,24 +84,28 @@ tr.StillRunningAfter = ts
 #   Characteristic Client Request header : none
 #   Characteristic Origin Response header : Cache-Control:max-age=5 , WWW-Authenticate: Basic realm="test"
 #
-# Via Infomation : [uScMsSfWpSeN:t cCMp sS]
+# Via Infomation : [uScMsSf pSeN:t cCMp sS]
 #   client-info is S(simple request, not conditional) , cache-lookup is M(miss) , server-info is S(served) ,
-#   cache-fill is W(written into cache, new copy) , proxy-info is S(served) , error-codes is N(no error)
+#   cache-fill is blank(no cache write performed) , proxy-info is S(served) , error-codes is N(no error)
 tr = Test.AddTestRun()
 tr.Processes.Default.StartBefore(Test.Processes.ts)
 tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_h/index.html'.format(port=ts.Variables.port)
 tr.Processes.Default.ReturnCode = 0
-tr.Processes.Default.Streams.stdout = "gold/401_Unauthorized_cache_write.gold"
+tr.Processes.Default.Streams.stdout = "gold/401_Unauthorized_not_cache.gold"
 tr.StillRunningAfter = ts
+
 # Test 3 - 2 :
-# Via Infomation : [uScHs f p eN:t cCHp s ]
-#   client-info is S(simple request, not conditional) , cache-lookup is H(in cache, fresh) , server-info is blank(no server connection needed) ,
-#   cache-fill is blank(=not recorded) , proxy-info is blank(=not recorded) , error-codes is N(no error)
+#   Characteristic Client Request header : none
+#   Characteristic Origin Response header : Cache-Control:max-age=5, public , WWW-Authenticate: Basic realm="test"
+#
+# Via Infomation : [uScMsSf pSeN:t cCMp sS]
+#   client-info is S(simple request, not conditional) , cache-lookup is M(miss) , server-info is S(served) ,
+#   cache-fill is blank(no cache write performed) , proxy-info is S(served) , error-codes is N(no error)
 tr = Test.AddTestRun()
 tr.Processes.Default.StartBefore(Test.Processes.ts)
-tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_h/index.html'.format(port=ts.Variables.port)
+tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_h_public/index.html'.format(port=ts.Variables.port)
 tr.Processes.Default.ReturnCode = 0
-tr.Processes.Default.Streams.stdout = "gold/401_Unauthorized_cache_hit.gold"
+tr.Processes.Default.Streams.stdout = "gold/401_Unauthorized_not_cache.gold"
 tr.StillRunningAfter = ts
 
 # Test 4 - 1 :

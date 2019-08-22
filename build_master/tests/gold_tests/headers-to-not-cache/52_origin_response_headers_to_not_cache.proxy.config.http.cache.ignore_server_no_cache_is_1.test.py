@@ -48,6 +48,7 @@ ts.Disk.records_config.update({
    'proxy.config.diags.debug.tags': 'http|dns',
    'proxy.config.diags.output.debug': 'L',
    'proxy.config.hostdb.host_file.path' : '/etc/hosts',
+   'proxy.config.http.cache.ignore_server_no_cache' : 1,
 })
 
 ###### Test Run ######
@@ -145,14 +146,14 @@ tr.Processes.Default.ReturnCode = 0
 tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_write.gold"
 tr.StillRunningAfter = ts
 # Test 5 - 2 :
-# Via Infomation : [uScSsNfUpSeN:t cCSp sS]
-#   client-info is S(simple request, not conditional) , cache-lookup is S(in cache, stale) , server-info is S(served) ,
-#   cache-fill is U(updated old cache copy) , proxy-info is S(served) , error-codes is N(no error)
+# Via Infomation : [uScHs f p eN:t cCHp s ]
+#   client-info is S(simple request, not conditional) , cache-lookup is H(in cache, fresh) , server-info is blank(no server connection needed) ,
+#   cache-fill is blank(=not recorded) , proxy-info is blank(=not recorded) , error-codes is N(no error)
 tr = Test.AddTestRun()
 tr.Processes.Default.StartBefore(Test.Processes.ts)
 tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 http://localhost:{port}/test_j/index.html'.format(port=ts.Variables.port)
 tr.Processes.Default.ReturnCode = 0
-tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_expired.gold"
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_hit.gold"
 tr.StillRunningAfter = ts
 
 # Test 6 - 1 :

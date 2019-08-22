@@ -175,7 +175,7 @@ tr = Test.AddTestRun()
 tr.Processes.Default.StartBefore(Test.Processes.ts)
 tr.Processes.Default.Command = 'curl -s -D - -v --ipv4 --http1.1 -H "Cache-Control:no-cache" http://localhost:{port}/test_d/index.html'.format(port=ts.Variables.port)
 tr.Processes.Default.ReturnCode = 0
-tr.Processes.Default.Streams.stdout = "gold/200_OK_hit.gold"
+tr.Processes.Default.Streams.stdout = "gold/200_OK_cache_hit.gold"
 tr.StillRunningAfter = ts
 
 # Test 2 - 5 :  Not Write Cache

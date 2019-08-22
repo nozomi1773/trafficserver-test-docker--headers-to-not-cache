@@ -49,6 +49,11 @@ RUN htpasswd -b -c /etc/nginx/.htpasswd test test \
  && mkdir /var/www/html/test_c && echo "test" > /var/www/html/test_c/index.html \
  && mkdir /var/www/html/test_d && echo "test" > /var/www/html/test_d/index.html \
  && mkdir /var/www/html/test_e && echo "test" > /var/www/html/test_e/index.html \
+ && mkdir /var/www/html/test_a_public && echo "test" > /var/www/html/test_a_public/index.html \
+ && mkdir /var/www/html/test_b_public && echo "test" > /var/www/html/test_b_public/index.html \
+ && mkdir /var/www/html/test_c_public && echo "test" > /var/www/html/test_c_public/index.html \
+ && mkdir /var/www/html/test_d_public && echo "test" > /var/www/html/test_d_public/index.html \
+ && mkdir /var/www/html/test_e_public && echo "test" > /var/www/html/test_e_public/index.html \
  && mkdir /var/www/html/test_f && echo "test" > /var/www/html/test_f/index.html \
  && mkdir /var/www/html/test_g && echo "test" > /var/www/html/test_g/index.html \
  && mkdir /var/www/html/test_h && echo "test" > /var/www/html/test_h/index.html \

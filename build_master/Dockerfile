@@ -61,6 +61,7 @@ RUN htpasswd -b -c /etc/nginx/.htpasswd test test \
  && mkdir /var/www/html/test_i && echo "test" > /var/www/html/test_i/index.html \
  && mkdir /var/www/html/test_j && echo "test" > /var/www/html/test_j/index.html \
  && mkdir /var/www/html/test_k && echo "test" > /var/www/html/test_k/index.html \
+ && mkdir /var/www/html/test_200_auth && echo "test" > /var/www/html/test_200_auth/index.html \
  && nginx -s reload
 
 USER build

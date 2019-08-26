@@ -3,7 +3,6 @@ Server: ATS/9.0.0
 Date: ``
 Content-Type: text/html
 Content-Length: 179
-WWW-Authenticate: Basic realm="test"
 Cache-Control: max-age=5
 Age: 0
 Connection: keep-alive

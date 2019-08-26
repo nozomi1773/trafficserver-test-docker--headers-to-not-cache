@@ -4,6 +4,6 @@ Date: ``
 Content-Type: text/html
 Content-Length: 179
 Cache-Control: max-age=5
-Age: 0
+Age: ``
 Connection: keep-alive
 Via: http/1.1 traffic_server (ApacheTrafficServer [uScHs f p eN:t cCHp s ])

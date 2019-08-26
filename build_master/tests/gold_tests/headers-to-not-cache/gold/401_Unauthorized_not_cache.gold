@@ -1,12 +1,10 @@
-400_Unauthorized_not_cache.gold
-
 HTTP/1.1 401 Unauthorized
 Server: ATS/9.0.0
 Date: ``
 Content-Type: text/html
 Content-Length: 179
 WWW-Authenticate: Basic realm="test"
-Cache-Control: max-age=5
+Cache-Control: max-age=5``
 Age: 0
 Connection: keep-alive
 Via: http/1.1 traffic_server (ApacheTrafficServer [uScMsSf pSeN:t cCMp sS])

@@ -67,7 +67,7 @@ tr.Processes.Default.Streams.stdout = "gold/200_OK_not_cache.gold"
 tr.StillRunningAfter = ts
 
 # Test 1 - 2 :
-#   Characteristic Client Request header : Authorization:Basic dGVzdDp0ZXN0
+#   Characteristic Client Request header : none
 #   Characteristic Origin Response header : none
 #
 # Via Infomation : [uScMsSf pSeN:t cCMp sS]

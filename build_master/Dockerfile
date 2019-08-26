@@ -45,7 +45,11 @@ RUN htpasswd -b -c /etc/nginx/.htpasswd test test \
  && mkdir -p /var/www/html \
  && echo "test" > /var/www/html/index.html \
  && mkdir /var/www/html/test_a && echo "test" > /var/www/html/test_a/index.html \
+ && mkdir /var/www/html/test_a_must_revalidate && echo "test" > /var/www/html/test_a_must_revalidate/index.html \
+ && mkdir /var/www/html/test_a_proxy_revalidate && echo "test" > /var/www/html/test_a_proxy_revalidate/index.html \
  && mkdir /var/www/html/test_b && echo "test" > /var/www/html/test_b/index.html \
+ && mkdir /var/www/html/test_b_must_revalidate && echo "test" > /var/www/html/test_b_must_revalidate/index.html \
+ && mkdir /var/www/html/test_b_proxy_revalidate && echo "test" > /var/www/html/test_b_proxy_revalidate/index.html \
  && mkdir /var/www/html/test_c && echo "test" > /var/www/html/test_c/index.html \
  && mkdir /var/www/html/test_d && echo "test" > /var/www/html/test_d/index.html \
  && mkdir /var/www/html/test_e && echo "test" > /var/www/html/test_e/index.html \
